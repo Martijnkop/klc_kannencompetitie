@@ -1,0 +1,72 @@
+services:
+  db_init:
+    build:
+      context: ./db_init
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+    # local db
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: mydb
+    profiles:
+      - tools
+
+  backend:
+    build:
+      context: ./leader
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      # barboek db
+      BARBOEK_HOST: 136.144.174.202
+      BARBOEK_USER: klc_barboek_user
+      BARBOEK_PASSWORD: if+iI4Rx1S4lylWF
+      BARBOEK_NAME: demos_barboek
+
+      # local db
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: mydb
+
+      # Server Port (optional, defaults to 3000)
+      PORT: 3000
+
+      START_DATE: 2026-04-20T12:00:00
+
+  frontend:
+    build:
+      context: ./leader_front
+    ports:
+      - "8080:8080"
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+      VITE_ADMIN_PASSWORD: admin123           # Naar ENVIRONMENT
+      VITE_LEADERBOARD_POLL_INTERVAL: 60000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mydb
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  db_data:
