@@ -144,7 +144,7 @@ router.put('/api/users/:lid_naam/group', express.json(), async (req, res) => {
 
     // Check if group exists
     const [groupRows] = await connection.query(
-      'SELECT id FROM groups WHERE id = ?',
+      'SELECT id FROM klc_groups WHERE id = ?',
       [group_id]
     );
 

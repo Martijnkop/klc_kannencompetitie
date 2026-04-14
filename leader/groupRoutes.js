@@ -9,7 +9,7 @@ router.get('/api/groups', async (req, res) => {
     
     const query = `
       SELECT id, name 
-      FROM groups 
+      FROM klc_groups 
       ORDER BY name ASC
     `;
     
@@ -42,7 +42,7 @@ router.get('/api/groups/:id', async (req, res) => {
     
     const query = `
       SELECT id, name 
-      FROM groups 
+      FROM klc_groups 
       WHERE id = ?
     `;
     
@@ -79,7 +79,7 @@ router.post('/api/groups', express.json(), async (req, res) => {
     
     // Check if group with same name already exists
     const [existingGroups] = await connection.query(
-      'SELECT id FROM groups WHERE name = ?',
+      'SELECT id FROM klc_groups WHERE name = ?',
       [name]
     );
 
@@ -90,7 +90,7 @@ router.post('/api/groups', express.json(), async (req, res) => {
 
     // Insert new group
     const query = `
-      INSERT INTO groups (name) 
+      INSERT INTO klc_groups (name) 
       VALUES (?)
     `;
     
@@ -99,7 +99,7 @@ router.post('/api/groups', express.json(), async (req, res) => {
     
     // Get the created group
     const [insertedRows] = await connection.query(
-      'SELECT id, name FROM groups WHERE id = ?',
+      'SELECT id, name FROM klc_groups WHERE id = ?',
       [groupId]
     );
     connection.release();

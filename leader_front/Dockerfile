@@ -6,4 +6,4 @@ RUN npm i -g serve
 COPY . .
 RUN npm run build
 EXPOSE 8080
-CMD ["serve", "-s", "dist"]
+CMD ["serve", "-s", "dist", "-l", "8080"]

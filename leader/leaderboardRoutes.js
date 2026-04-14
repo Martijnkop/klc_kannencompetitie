@@ -99,7 +99,7 @@ router.get('/api/leaderboard/groups', async (req, res) => {
         COUNT(DISTINCT pss.lid_naam) as member_count
       FROM sales pss
       LEFT JOIN ${process.env.DB_NAME}.users u ON pss.lid_naam = u.lid_naam
-      LEFT JOIN ${process.env.DB_NAME}.groups g ON u.group_id = g.id
+      LEFT JOIN ${process.env.DB_NAME}.klc_groups g ON u.group_id = g.id
       LEFT JOIN ${process.env.DB_NAME}.products p ON pss.product_id = p.product_id
       WHERE pss.transaction_timestamp >= ? AND pss.lid_naam IS NOT NULL AND pss.lid_naam != ''
       GROUP BY COALESCE(u.group_id, 0), COALESCE(g.name, 'Unassigned')

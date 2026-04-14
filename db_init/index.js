@@ -23,7 +23,7 @@ const init = (async () => {
         multiplier DECIMAL(3,0) DEFAULT 1 NOT NULL CHECK (multiplier >= 0 AND multiplier <= 127)
       )`,
       // Create groups table
-      `CREATE TABLE IF NOT EXISTS groups (
+      `CREATE TABLE IF NOT EXISTS klc_groups (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL UNIQUE
       )`,
@@ -31,7 +31,7 @@ const init = (async () => {
       `CREATE TABLE IF NOT EXISTS users (
         lid_naam VARCHAR(255) PRIMARY KEY,
         group_id INT,
-        FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
+        FOREIGN KEY (group_id) REFERENCES klc_groups(id) ON DELETE SET NULL
       )`,
       `CREATE TABLE IF NOT EXISTS sales (
         id VARCHAR(255) PRIMARY KEY,
